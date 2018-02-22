@@ -2,13 +2,25 @@
 <html>
 <head>
     <title>SoDir</title>
+    <link rel="stylesheet" href="{{ static_url("style.css") }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-    <p>
-        <h1>SoDir</h1>
-    </p>
-    <p>
-        A social media directory
-    </p>
+    <div id="navbar">
+        <ul>
+            <li>SoDir</li>
+            <li id="user_name">{{ user_name }}</li>
+        </ul>
+    </div>
+    <div id="socials">
+        <ul>
+            {% for social in socials %}
+                <ul class="social">
+                    <li>{{ social[0] }}</li>
+                    <li class="link"><a href="{{ social[1] }}">{{ social[1] }}</a></li>
+                </ul>
+            {% end %}
+        </ul>
+    </div>
 </body>
 </html>

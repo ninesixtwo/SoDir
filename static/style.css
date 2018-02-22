@@ -1,0 +1,31 @@
+html {
+    max-width: 500px;
+    margin: 0 auto;
+    font-family: "Helvetica";
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+li {
+    display: inline-block;
+}
+
+#user_name {
+    float: right;
+}
+
+.link {
+    float: right;
+}
+
+#socials {
+    padding-top: 15px;
+}
+
+.social {
+    padding-top: 5px;
+}

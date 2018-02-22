@@ -6,7 +6,8 @@ import os.path
 
 class RootHandler(tornado.web.RequestHandler):
     def get(self):
-        self.render("index.html")
+        socials = [["Instagram", "https://instagram.com/sam__drew"], ["Twitter", "https://twitter.com/sam__drew"], ["GitHub", "https://github.com/sam-drew"]]
+        self.render("index.html", user_name = "Sam Drew", socials = socials)
 
 enable_pretty_logging()
 app = tornado.web.Application(
