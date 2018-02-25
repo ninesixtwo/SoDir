@@ -4,10 +4,19 @@ from tornado.log import enable_pretty_logging
 import logging
 import os.path
 
+import dbhandler
+
 class RootHandler(tornado.web.RequestHandler):
     def get(self):
-        socials = [["Instagram", "https://instagram.com/sam__drew"], ["Twitter", "https://twitter.com/sam__drew"], ["GitHub", "https://github.com/sam-drew"]]
-        self.render("index.html", user_name = "Sam Drew", socials = socials)
+        info = dbhandler.getSocials("sam-drew")
+        socials = []
+        for social in info:
+            url = social['url']
+            user_name = social['url'].split("/")[-1]
+            name = social['social_name']
+            socials.append([name, url, user_name])
+        user_name = info[0]['user_name']
+        self.render("index.html", user_name = user_name, socials = socials)
 
 enable_pretty_logging()
 app = tornado.web.Application(
