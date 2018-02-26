@@ -15,12 +15,21 @@ li {
     display: inline-block;
 }
 
+img {
+    vertical-align: middle;
+}
+
 #user_name {
+    padding-top: 5px;
     float: right;
 }
 
+#social_name {
+    padding: 5px;
+}
+
 .link {
-    float: right;
+    color: #0000ee;
 }
 
 #socials {
@@ -34,9 +43,22 @@ li {
 .title {
     text-decoration: none;
     font-weight: bolder;
+    color: black;
+    font-size: 125%;
 }
 
 #sign_up {
     margin: auto;
     align: center;
+}
+
+#social_link {
+    float: right;
+    vertical-align: middle;
+}
+
+.nav_bar_item {
+    height: 20px;
+    padding: 5px;
+    float: right;
 }
