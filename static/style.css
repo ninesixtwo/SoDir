@@ -62,3 +62,12 @@ img {
     padding: 5px;
     float: right;
 }
+
+#footer {
+    position: fixed;
+    bottom: 0;
+    height: 50px;
+    font-size: 70%;
+    margin: 0;
+    padding: 0;
+}

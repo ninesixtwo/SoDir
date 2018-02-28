@@ -8,29 +8,24 @@ import dbhandler
 
 class RootHandler(tornado.web.RequestHandler):
     def get(self):
-        info = dbhandler.getSocials("sam-drew")
-        socials = []
-        for social in info:
-            url = social['url']
-            user_name = social['url'].split("/")[-1]
-            name = social['social_name']
-            socials.append([name, url, user_name])
-        user_name = info[0]['user_name']
-        self.render("index.html", user_name = user_name, socials = socials)
+        self.render("index.html")
 
 class DirectoryHandler(tornado.web.RequestHandler):
     def get(self, url):
         req_user_name = url.split("/")[-1]
         info = dbhandler.getSocials(req_user_name)
         print(info)
-        socials = []
-        for social in info:
-            url = social['url']
-            user_name = social['url'].split("/")[-1]
-            name = social['social_name']
-            socials.append([name, url, user_name])
-        user_name = info[0]['user_name']
-        self.render("index.html", user_name = user_name, socials = socials)
+        if info == False:
+            self.render("no-account.html")
+        else:
+            socials = []
+            for social in info:
+                url = social['url']
+                user_name = social['url'].split("/")[-1]
+                name = social['social_name']
+                socials.append([name, url, user_name])
+            user_name = info[0]['user_name']
+            self.render("directory.html", user_name = user_name, socials = socials)
 
 enable_pretty_logging()
 app = tornado.web.Application(

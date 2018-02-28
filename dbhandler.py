@@ -22,10 +22,13 @@ def getSocials(user_name):
     try:
         with connection.cursor() as cursor:
             sql = ("SELECT * FROM socials INNER JOIN users ON socials.user_id = users.ID WHERE users.user_name = '{}'")
-            sql_f = sql.format("sam-drew")
+            sql_f = sql.format(user_name)
             cursor.execute(sql_f)
             result = cursor.fetchall()
-            return(result)
+            if len(result) == 0:
+                return(False)
+            else:
+                return(result)
     except Exception as e:
         return("Error: {0}. Error code is {1}".format(e, e.args[0]))
     finally:

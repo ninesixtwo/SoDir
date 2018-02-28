@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>SoDir | Social Directories</title>
+    <title>SoDir | {{ user_name }}</title>
     <link rel="stylesheet" href="{{ static_url("style.css") }}">
     <link rel="icon" href="{{ static_url("favicon.png") }}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,12 +10,19 @@
     <div id="navbar">
         <ul>
             <li class="title"><a class="title" href="http://sodir.xyz">SoDir</a></li>
+            <li id="user_name">{{ user_name }}</li>
         </ul>
     </div>
     <div id="socials">
-        <p>
-            SoDir allows you to easily create a sharable directory of your social media accounts.
-        </p>
+        <ul>
+            {% for social in socials %}
+                <ul class="social">
+                    <li id="social_name">{{ social[0] }}</li>
+                    <li class="nav_bar_item"><img src="{{ static_url("not_verified.png") }}" alt="check" height="20" width="20"></li>
+                    <li class="nav_bar_item"><a class="link" href="{{ social[1] }}">{{ social[2] }}</a></li>
+                </ul>
+            {% end %}
+        </ul>
     </div>
     <div id="footer">
         <p>Made with &lt;3 by <a href="http://labs.ninesixtwo.xyz">NINESIXTWO</a> in the UK.</p>
