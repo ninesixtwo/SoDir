@@ -12,6 +12,7 @@ CREATE TABLE users (
     user_name VARCHAR(255) NOT NULL,
     fb_id VARCHAR(255),
     twiter_id VARCHAR(255),
+    session_id VARCHAR(255),
     PRIMARY KEY (ID)
 );
 

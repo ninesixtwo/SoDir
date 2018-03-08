@@ -33,3 +33,32 @@ def getSocials(user_name):
         return("Error: {0}. Error code is {1}".format(e, e.args[0]))
     finally:
         connection.close()
+
+def getSocialIDsFromSessionID(session_id):
+    connection = makeConnection()
+    try:
+        with connection.cursor() as cursor:
+            sql = ("SELECT socials.ID FROM socials INNER JOIN users ON socials.user_id = users.ID WHERE users.session_id = '{}'")
+            sql_f = sql.format(session_id)
+            cursor.execute(sql_f)
+            result = cursor.fetchall()
+            if len(result) == 0:
+                return(false)
+            else:
+                return(result)
+    except Exception as e:
+        return("Error: {0}. Error code is {1}".format(e, e.args[0]))
+    finally:
+        connection.close()
+
+def deleteSocial(social_id):
+    connection = makeConnection()
+    try:
+        with connection.cursor() as cursor:
+            sql = ("DELETE FROM socials WHERE ID = {}")
+            sql_f = sql.format(session_id)
+            cursor.execute(sql_f)
+    except Exception as e:
+        return("Error: {0}. Error code is {1}".format(e, e.args[0]))
+    finally:
+        connection.close()
