@@ -45,7 +45,16 @@ class EditDirectoryHandler(tornado.web.RequestHandler):
                         social_id = social['ID']
                         socials.append([name, url, user_name, social_id])
                 self.render("edit.html", user_name = user_name, socials = socials)
+
     def post(self):
+        social_urls = {
+            "Twitter": "https://twitter.com/",
+            "Instagram": "https://instagram.com/",
+            "Github": "https://github.com/"
+        }
+        # If the user is not logged in, redirect to homepage.
+        if not self.get_secure_cookie("session_id"):
+            self.redirect("/")
         # Edit form submits hidden values. Action tells wether deleting or adding.
         action = self.get_argument("action")
         if action == "delete":
@@ -60,12 +69,14 @@ class EditDirectoryHandler(tornado.web.RequestHandler):
                     if s_id['ID'] == social_id:
                         # Delete the social link from the directory.
                         dbhandler.deleteSocial(social_id)
-            self.redirect("/me/edit")
-        if action == "add_new":
+        elif action == "add_new":
             social_name = self.get_argument("social_name_select")
-            user_name = self.get_argument("user_name")
-            user_id = dbhandler.getUserID(user_name)
-
+            social_user_name = self.get_argument("user_name")
+            session_id = self.get_secure_cookie("session_id").decode("utf-8")
+            user_id = dbhandler.getUserIDFromSessionID(session_id)['ID']
+            social_url = (social_urls[social_name] + social_user_name)
+            dbhandler.addNewSocial(user_id, social_url, social_name)
+        self.redirect("/me/edit")
 
 enable_pretty_logging()
 app = tornado.web.Application(

@@ -106,3 +106,17 @@ def getUserNameFromSessionID(session_id):
         return("Error: {0}. Error code is {1}".format(e, e.args[0]))
     finally:
         connection.close()
+
+def getUserIDFromSessionID(session_id):
+    connection = makeConnection()
+    try:
+        with connection.cursor() as cursor:
+            sql = ("SELECT ID FROM users WHERE session_id = '{0}'")
+            sql_f = sql.format(session_id)
+            cursor.execute(sql_f)
+            result = cursor.fetchone()
+            return(result)
+    except Exception as e:
+        return("Error: {0}. Error code is {1}".format(e, e.args[0]))
+    finally:
+        connection.close()
