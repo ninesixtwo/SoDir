@@ -15,6 +15,25 @@
     </div>
     <div id="socials">
         <ul>
+            <form id="add_new_form" action="" method="post">
+                <ul class="social">
+                    <li id="social_name">
+                        <select id="social_name_select" name="social_name_select">
+                            <option value="Twitter">Twitter</option>
+                            <option value="Instagram">Instagram</option>
+                            <option value="Github">Github</option>
+                        </select>
+                    </li>
+                    <li id="new_social_submit">
+                        <input type="hidden" name="action" value="add_new">
+                        <input type="submit" value="Add">
+                    </li>
+                    <li id="user_name_input">
+                        <input type="text" name="user_name">
+                    </li>
+                </ul>
+            {% module xsrf_form_html() %}
+            </form>
             {% for social in socials %}
                 <ul class="social">
                     <li id="social_name">{{ social[0] }}</li>
@@ -33,6 +52,7 @@
         </ul>
     </div>
     <div id="footer">
+        <p><a href="http://sodir.xyz">About</a></p>
         <p>Made with &lt;3 by <a href="http://labs.ninesixtwo.xyz">NINESIXTWO</a> in the UK.</p>
     </div>
 </body>

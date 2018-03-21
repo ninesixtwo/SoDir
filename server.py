@@ -6,11 +6,6 @@ import os.path
 
 import dbhandler
 
-# This is a demo dict that has a session cookie : user_name.
-sessions = {
-    "sampleSession": "sam-drew"
-}
-
 class RootHandler(tornado.web.RequestHandler):
     def get(self):
         self.render("index.html")
@@ -38,28 +33,39 @@ class EditDirectoryHandler(tornado.web.RequestHandler):
             self.set_secure_cookie("session_id", "sampleSession")
             self.redirect("/me/edit")
         else:
-            user_name = sessions[self.get_secure_cookie("session_id").decode("utf-8")]
+            user_name = dbhandler.getUserNameFromSessionID(self.get_secure_cookie("session_id").decode("utf-8"))['user_name']
             if user_name != None:
                 info = dbhandler.getSocials(user_name)
                 socials = []
-                for social in info:
-                    url = social['url']
-                    user_name = social['url'].split("/")[-1]
-                    name = social['social_name']
-                    social_id = social['ID']
-                    socials.append([name, url, user_name, social_id])
+                if info != False:
+                    for social in info:
+                        url = social['url']
+                        user_name = social['url'].split("/")[-1]
+                        name = social['social_name']
+                        social_id = social['ID']
+                        socials.append([name, url, user_name, social_id])
                 self.render("edit.html", user_name = user_name, socials = socials)
     def post(self):
+        # Edit form submits hidden values. Action tells wether deleting or adding.
         action = self.get_argument("action")
         if action == "delete":
-            social_id = self.get_argument("social_id")
+            # Hidden value social_id submits the id of the social to be deleted.
+            social_id = int(self.get_argument("social_id"))
+            # session_id is a cookie set when the user logs in, can be used to
+            # determine which user is logged in.
             session_id = self.get_secure_cookie("session_id").decode("utf-8")
             social_ids_from_sess_id = dbhandler.getSocialIDsFromSessionID(session_id)
-            for s_id in social_ids_from_sess_id:
-                if s_id['ID'] == social_id:
-                    # Delete the social link from the directory.
-                    dbhandler.deleteSocial(social_id)
+            if social_ids_from_sess_id != False:
+                for s_id in social_ids_from_sess_id:
+                    if s_id['ID'] == social_id:
+                        # Delete the social link from the directory.
+                        dbhandler.deleteSocial(social_id)
             self.redirect("/me/edit")
+        if action == "add_new":
+            social_name = self.get_argument("social_name_select")
+            user_name = self.get_argument("user_name")
+            user_id = dbhandler.getUserID(user_name)
+
 
 enable_pretty_logging()
 app = tornado.web.Application(

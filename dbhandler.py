@@ -43,7 +43,7 @@ def getSocialIDsFromSessionID(session_id):
             cursor.execute(sql_f)
             result = cursor.fetchall()
             if len(result) == 0:
-                return(false)
+                return(False)
             else:
                 return(result)
     except Exception as e:
@@ -55,9 +55,53 @@ def deleteSocial(social_id):
     connection = makeConnection()
     try:
         with connection.cursor() as cursor:
-            sql = ("DELETE FROM socials WHERE ID = {}")
+            sql = ("DELETE FROM socials WHERE ID = '{}'")
+            sql_f = sql.format(social_id)
+            cursor.execute(sql_f)
+            connection.commit()
+            return(True)
+    except Exception as e:
+        return("Error: {0}. Error code is {1}".format(e, e.args[0]))
+    finally:
+        connection.close()
+
+def addNewSocial(user_id, url, social_name):
+    connection = makeConnection()
+    try:
+        with connection.cursor() as cursor:
+            sql = ("INSERT INTO socials (user_id, social_name, url) VALUES ('{0}', '{1}', '{2}')")
+            sql_f = sql.format(user_id, social_name, url)
+            cursor.execute(sql_f)
+            connection.commit()
+            return(True)
+    except Exception as e:
+        return("Error: {0}. Error code is {1}".format(e, e.args[0]))
+    finally:
+        connection.close()
+
+def getUserID(user_name):
+    connection = makeConnection()
+    try:
+        with connection.cursor() as cursor:
+            sql = ("SELECT ID FROM users WHERE user_name = '{0}'")
+            sql_f = sql.format(user_name)
+            cursor.execute(sql_f)
+            result = cursor.fetchone()
+            return(result)
+    except Exception as e:
+        return("Error: {0}. Error code is {1}".format(e, e.args[0]))
+    finally:
+        connection.close()
+
+def getUserNameFromSessionID(session_id):
+    connection = makeConnection()
+    try:
+        with connection.cursor() as cursor:
+            sql = ("SELECT user_name FROM users WHERE session_id = '{0}'")
             sql_f = sql.format(session_id)
             cursor.execute(sql_f)
+            result = cursor.fetchone()
+            return(result)
     except Exception as e:
         return("Error: {0}. Error code is {1}".format(e, e.args[0]))
     finally:

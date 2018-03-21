@@ -66,8 +66,22 @@ img {
 #footer {
     position: fixed;
     bottom: 0;
-    height: 50px;
+    height: 100px;
     font-size: 70%;
     margin: 0;
     padding: 0;
+}
+
+#new_social_submit {
+    float: right;
+    padding: 5px;
+}
+
+#add_new_form {
+    padding-bottom: 20px;
+}
+
+#user_name_input {
+    float: right;
+    padding: 5px;
 }
