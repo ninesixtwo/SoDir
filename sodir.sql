@@ -10,9 +10,8 @@ CREATE TABLE users (
     ID INT NOT NULL AUTO_INCREMENT,
     email VARCHAR(255),
     user_name VARCHAR(255) NOT NULL,
-    fb_id VARCHAR(255),
-    twiter_id VARCHAR(255),
     session_id VARCHAR(255),
+    login_key VARCHAR(36),
     PRIMARY KEY (ID)
 );
 

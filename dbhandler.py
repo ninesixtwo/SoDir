@@ -120,3 +120,62 @@ def getUserIDFromSessionID(session_id):
         return("Error: {0}. Error code is {1}".format(e, e.args[0]))
     finally:
         connection.close()
+
+def updateSessionID(user_name, session_id):
+    connection = makeConnection()
+    try:
+        with connection.cursor() as cursor:
+            sql = ("UPDATE users SET session_id = '{0}' WHERE user_name = '{1}'")
+            sql_f = sql.format(session_id, user_name)
+            cursor.execute(sql_f)
+            connection.commit()
+            return(True)
+    except Exception as e:
+        return("Error: {0}. Error code is {1}".format(e, e.args[0]))
+    finally:
+        connection.close()
+
+def getUserName(email):
+    connection = makeConnection()
+    try:
+        with connection.cursor() as cursor:
+            sql = ("SELECT user_name FROM users WHERE email = '{0}'")
+            sql_f = sql.format(email)
+            cursor.execute(sql_f)
+            result = cursor.fetchone()
+            if result ==  None:
+                return(False)
+            else:
+                return(result)
+    except Exception as e:
+        return("Error: {0}. Error code is {1}".format(e, e.args[0]))
+    finally:
+        connection.close()
+
+def setLoginKey(user_name, login_key):
+    connection = makeConnection()
+    try:
+        with connection.cursor() as cursor:
+            sql = ("UPDATE users SET login_key = '{0}' WHERE user_name = '{1}'")
+            sql_f = sql.format(login_key, user_name)
+            cursor.execute(sql_f)
+            connection.commit()
+            return(True)
+        except Exception as e:
+            return("Error: {0}. Error code is {1}".format(e, e.args[0]))
+        finally:
+            connection.close()
+
+def clearLoginKey(user_name):
+    connection = makeConnection()
+    try:
+        with connection.cursor() as cursor:
+            sql = ("UPDATE users SET login_key = NULL WHERE user_name = '{0}'")
+            sql_f = sql.format(user_name)
+            cursor.execute(sql_f)
+            connection.commit()
+            return(True)
+    except Exception as e:
+        return("Error: {0}. Error code is {1}".format(e, e.args[0]))
+    finally:
+        connection.close()
