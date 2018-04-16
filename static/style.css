@@ -85,3 +85,34 @@ img {
     float: right;
     padding: 5px;
 }
+
+#login_signup {
+    max-width: 550px;
+    padding-top: 15px;
+    margin: 0 auto;
+    font-size: 125%;
+}
+
+#submit_buttons {
+    display: block;
+    padding-top: 5px;
+}
+
+#username_input, #email_input {
+    display: block;
+    height: auto;
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    width: 75%;
+}
+
+#login_link_li {
+    padding-top: 5px;
+    float: right;
+}
+
+#login_link {
+    text-decoration: none;
+    color: black;
+}
