@@ -179,3 +179,17 @@ def clearLoginKey(user_name):
         return("Error: {0}. Error code is {1}".format(e, e.args[0]))
     finally:
         connection.close()
+
+def getUserNameFromLoginKey(login_key):
+    connection = makeConnection()
+    try:
+        with connection.cursor() as cursor:
+            sql = ("SELECT user_name FROM users WHERE login_key = '{0}'")
+            sql_f = sql.format(login_key)
+            cursor.execute(sql_f)
+            result = cursor.fetchone()
+            return(result)
+    except Exception as e:
+        return("Error: {0}. Error code is {1}".format(e, e.args[0]))
+    finally:
+        connection.close()
