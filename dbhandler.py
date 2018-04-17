@@ -161,10 +161,10 @@ def setLoginKey(user_name, login_key):
             cursor.execute(sql_f)
             connection.commit()
             return(True)
-        except Exception as e:
-            return("Error: {0}. Error code is {1}".format(e, e.args[0]))
-        finally:
-            connection.close()
+    except Exception as e:
+        return("Error: {0}. Error code is {1}".format(e, e.args[0]))
+    finally:
+        connection.close()
 
 def clearLoginKey(user_name):
     connection = makeConnection()
