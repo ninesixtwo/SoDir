@@ -5,6 +5,8 @@ from tornado.log import enable_pretty_logging
 import logging
 import os.path
 import uuid
+import threading
+import time
 
 import dbhandler
 
@@ -99,27 +101,39 @@ class LoginSignupHandler(tornado.web.RequestHandler):
             # TODO Send email to user.
             # Generate login key
             login_key = str(uuid.uuid4())
-            print(dbhandler.setLoginKey(user_name['user_name'], login_key))
+            dbhandler.setLoginKey(user_name['user_name'], login_key)
+            # Start the login key timeout worker thread.
+            t = threading.Thread(target = loginKeyTimeout_worker, args=(user_name['user_name'],))
+            logging.info("Starting loginkey timeout worker.")
+            t.start()
             self.redirect("/sodir/checkuremail")
 
 class LoginVerificationHandler(tornado.web.RequestHandler):
     def get(self, url):
-        print(url)
         # TODO regex to check if valid login key.
         if len(url) != 36:
             self.redirect("/")
         else:
-            # Generate session id.
-            session_id = str(uuid.uuid4())
-            user_name = dbhandler.getUserNameFromLoginKey(url)['user_name']
-            # Save session id to database and as cookie to users browser.
-            dbhandler.updateSessionID(user_name, session_id)
-            self.set_secure_cookie("session_id", session_id)
-            self.redirect("/sodir/edit")
+            # Check if login key is valid.
+            user_name = dbhandler.getUserNameFromLoginKey(url)
+            if user_name != None:
+                # Generate session id.
+                session_id = str(uuid.uuid4())
+                # Save session id to database and as cookie to users browser.
+                dbhandler.updateSessionID(user_name, session_id)
+                self.set_secure_cookie("session_id", session_id)
+                self.redirect("/sodir/edit")
+            else:
+                self.redirect("/sodir/login")
 
 class CheckEmailHandler(tornado.web.RequestHandler):
     def get(self):
         self.render("checkuremail.html")
+
+def loginKeyTimeout_worker(user_name):
+    time.sleep(1200)
+    print(dbhandler.clearLoginKey(user_name))
+    logging.info("Clearing a login key.")
 
 enable_pretty_logging()
 app = tornado.web.Application(
