@@ -1,8 +1,10 @@
 import tornado.web
 import tornado.httpserver
 from tornado.log import enable_pretty_logging
+
 import logging
 import os.path
+import uuid
 
 import dbhandler
 
@@ -30,8 +32,7 @@ class DirectoryHandler(tornado.web.RequestHandler):
 class EditDirectoryHandler(tornado.web.RequestHandler):
     def get(self):
         if not self.get_secure_cookie("session_id"):
-            self.set_secure_cookie("session_id", "sampleSession")
-            self.redirect("/me/edit")
+            self.redirect("/sodir/login")
         else:
             user_name = dbhandler.getUserNameFromSessionID(self.get_secure_cookie("session_id").decode("utf-8"))['user_name']
             if user_name != None:
@@ -76,11 +77,54 @@ class EditDirectoryHandler(tornado.web.RequestHandler):
             user_id = dbhandler.getUserIDFromSessionID(session_id)['ID']
             social_url = (social_urls[social_name] + social_user_name)
             dbhandler.addNewSocial(user_id, social_url, social_name)
-        self.redirect("/me/edit")
+        self.redirect("/sodir/edit")
+
+class LoginSignupHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.render("login_signup.html", message = "")
+
+    def post(self):
+        supplied_user_name = self.get_argument("username")
+        supplied_email = self.get_argument("email")
+        # Check if account is associated with email supplied.
+        user_name = dbhandler.getUserName(supplied_email)
+        if user_name == False:
+            # Email is not registered. Sign user up.
+            self.redirect("/sodir/checkuremail")
+        elif user_name['user_name'] != supplied_user_name:
+            # Incorrect username / email combination.
+            self.render("login_signup.html", message = "Incorrect username or email.")
+        else:
+            # User is registered, log them in.
+            # TODO Send email to user.
+            # Generate login key
+            login_key = str(uuid.uuid4())
+            print(dbhandler.setLoginKey(user_name['user_name'], login_key))
+            self.redirect("/sodir/checkuremail")
+
+class LoginVerificationHandler(tornado.web.RequestHandler):
+    def get(self, url):
+        print(url)
+        # TODO regex to check if valid login key.
+        if len(url) != 36:
+            self.redirect("/")
+        else:
+            # Generate session id.
+            session_id = str(uuid.uuid4())
+            user_name = dbhandler.getUserNameFromLoginKey(url)['user_name']
+            # Save session id to database and as cookie to users browser.
+            dbhandler.updateSessionID(user_name, session_id)
+            self.set_secure_cookie("session_id", session_id)
+            self.redirect("/sodir/edit")
+
+class CheckEmailHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.render("checkuremail.html")
 
 enable_pretty_logging()
 app = tornado.web.Application(
-    [(r"/", RootHandler), (r"/me/edit", EditDirectoryHandler), (r"/(.*)", DirectoryHandler),],
+    [(r"/", RootHandler), (r"/sodir/login", LoginSignupHandler), (r"/sodir/checkuremail", CheckEmailHandler), (r"/sodir/edit", EditDirectoryHandler),
+    (r"/sodir/v/(.*)", LoginVerificationHandler), (r"/(.*)", DirectoryHandler),],
     # Set the path where tornado will find the html templates
     template_path = os.path.join(os.path.dirname(__file__), "templates"),
     static_path = os.path.join(os.path.dirname(__file__), "static"),
