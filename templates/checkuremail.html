@@ -1,5 +1,25 @@
 <!DOCTYPE html>
 <html>
+<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css" />
+<script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js"></script>
+<script>
+window.addEventListener("load", function(){
+window.cookieconsent.initialise({
+  "palette": {
+    "popup": {
+      "background": "#ffffff",
+      "text": "#000000"
+    },
+    "button": {
+      "background": "#000000",
+      "text": "#ffffff"
+    }
+  },
+  "theme": "edgeless",
+  "position": "top",
+  "static": true
+})});
+</script>
 <head>
     <title>SoDir | Social Directories</title>
     <link rel="stylesheet" href="{{ static_url("style.css") }}">
@@ -7,19 +27,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-    <div id="navbar">
-        <ul>
-            <li class="title"><a class="title" href="http://sodir.xyz">SoDir</a></li>
-        </ul>
-    </div>
-    <div id="socials">
-        <p>
-            We've sent you an email with a confirmation link. Click the link and you'll be logged in to SoDir on that device. The link will expire in 20 minutes.
-        </p>
-    </div>
-    <div id="footer">
-        <p><a href="http://sodir.xyz">About</a></p>
-        <p>Made with &lt;3 by <a href="http://labs.ninesixtwo.xyz">NINESIXTWO</a> in the UK.</p>
+    <div id="content">
+        <div id="navbar">
+            <ul>
+                <li class="title"><a class="title" href="http://sodir.xyz">SoDir</a></li>
+            </ul>
+        </div>
+        <div id="socials">
+            <p>
+                We've sent you an email with a confirmation link. Click the link and you'll be logged in to SoDir on that device. The link will expire in 20 minutes.
+            </p>
+        </div>
+        <div id="footer">
+            <p><a href="http://sodir.xyz">About</a></p>
+            <p>Made with &lt;3 by <a href="http://labs.ninesixtwo.xyz">NINESIXTWO</a> in the UK.</p>
+        </div>
     </div>
 </body>
 </html>

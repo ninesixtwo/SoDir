@@ -1,5 +1,25 @@
 <!DOCTYPE html>
 <html>
+<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css" />
+<script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js"></script>
+<script>
+window.addEventListener("load", function(){
+window.cookieconsent.initialise({
+  "palette": {
+    "popup": {
+      "background": "#ffffff",
+      "text": "#000000"
+    },
+    "button": {
+      "background": "#000000",
+      "text": "#ffffff"
+    }
+  },
+  "theme": "edgeless",
+  "position": "top",
+  "static": true
+})});
+</script>
 <head>
     <title>SoDir | Login/Signup</title>
     <link rel="stylesheet" href="{{ static_url("style.css") }}">
@@ -7,28 +27,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-    <div id="navbar">
-        <ul>
-            <li class="title"><a class="title" href="http://sodir.xyz">SoDir</a></li>
-        </ul>
-    </div>
-    <div id="login_signup">
-        <form method="post" action="">
-            <input id="username_input" type="text" name="username" placeholder="Username">
-            <input id="email_input" type="email" name="email" placeholder="Email Address">
-            <div id="submit_buttons">
-                <input id="login_button" type="submit" value="Login">
-                <input id="singup_button" type="submit" value="Signup">
-            </div>
-            {% module xsrf_form_html() %}
-            <div>
-                {{ message }}
-            </div>
-        </form>
-    </div>
-    <div id="footer">
-        <p><a href="http://sodir.xyz">About</a></p>
-        <p>Made with &lt;3 by <a href="http://labs.ninesixtwo.xyz">NINESIXTWO</a> in the UK.</p>
+    <div id="content">
+        <div id="navbar">
+            <ul>
+                <li class="title"><a class="title" href="http://sodir.xyz">SoDir</a></li>
+            </ul>
+        </div>
+        <div id="login_signup">
+            <form method="post" action="">
+                <input id="username_input" type="text" name="username" placeholder="Username">
+                <input id="email_input" type="email" name="email" placeholder="Email Address">
+                <div id="submit_buttons">
+                    <input id="login_button" type="submit" value="Login">
+                    <input id="singup_button" type="submit" value="Signup">
+                </div>
+                {% module xsrf_form_html() %}
+                <div>
+                    {{ message }}
+                </div>
+            </form>
+        </div>
+        <div id="footer">
+            <p><a href="http://sodir.xyz">About</a></p>
+            <p>Made with &lt;3 by <a href="http://labs.ninesixtwo.xyz">NINESIXTWO</a> in the UK.</p>
+        </div>
     </div>
 </body>
 </html>

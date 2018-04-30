@@ -130,6 +130,10 @@ class CheckEmailHandler(tornado.web.RequestHandler):
     def get(self):
         self.render("checkuremail.html")
 
+class PrivacyPolicyHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.render("privacy_policy.html")
+
 def loginKeyTimeout_worker(user_name):
     time.sleep(1200)
     print(dbhandler.clearLoginKey(user_name))
@@ -138,7 +142,7 @@ def loginKeyTimeout_worker(user_name):
 enable_pretty_logging()
 app = tornado.web.Application(
     [(r"/", RootHandler), (r"/sodir/login", LoginSignupHandler), (r"/sodir/checkuremail", CheckEmailHandler), (r"/sodir/edit", EditDirectoryHandler),
-    (r"/sodir/v/(.*)", LoginVerificationHandler), (r"/(.*)", DirectoryHandler),],
+    (r"/sodir/privacy", PrivacyPolicyHandler), (r"/sodir/v/(.*)", LoginVerificationHandler), (r"/(.*)", DirectoryHandler),],
     # Set the path where tornado will find the html templates
     template_path = os.path.join(os.path.dirname(__file__), "templates"),
     static_path = os.path.join(os.path.dirname(__file__), "static"),

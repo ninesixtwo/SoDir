@@ -1,8 +1,13 @@
 html {
-    max-width: 500px;
     margin: 0 auto;
     font-family: "Helvetica";
     font-size: 125%;
+}
+
+#content {
+    padding-top: 10px;
+    max-width: 600px;
+    margin: 0 auto;
 }
 
 ul {
@@ -34,6 +39,7 @@ img {
 
 #socials {
     padding-top: 15px;
+    padding-bottom: 75px;
 }
 
 .social {
@@ -66,10 +72,12 @@ img {
 #footer {
     position: fixed;
     bottom: 0;
-    height: 100px;
+    height: 75px;
+    width: 100%;
     font-size: 70%;
     margin: 0;
     padding: 0;
+    background-color: #ffffff;
 }
 
 #new_social_submit {
