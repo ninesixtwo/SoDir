@@ -37,6 +37,9 @@ window.cookieconsent.initialise({
             <form method="post" action="">
                 <input id="username_input" type="text" name="username" placeholder="Username">
                 <input id="email_input" type="email" name="email" placeholder="Email Address">
+                <p id="disclaimer">
+                    By clicking 'Login' or 'Signup' you are confirming that you have read and agree to the <a href="/sodir/privacy">privacy policy</a> and <a href="/sodir/terms">terms and conditions of use</a>.
+                </p>
                 <div id="submit_buttons">
                     <input id="login_button" type="submit" value="Login">
                     <input id="singup_button" type="submit" value="Signup">
@@ -47,10 +50,7 @@ window.cookieconsent.initialise({
                 </div>
             </form>
         </div>
-        <div id="footer">
-            <p><a href="http://sodir.xyz">About</a></p>
-            <p>Made with &lt;3 by <a href="http://labs.ninesixtwo.xyz">NINESIXTWO</a> in the UK.</p>
-        </div>
+        {% include footer.html %}
     </div>
 </body>
 </html>

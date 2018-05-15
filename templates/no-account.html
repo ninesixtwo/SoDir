@@ -31,6 +31,7 @@ window.cookieconsent.initialise({
         <div id="navbar">
             <ul>
                 <li class="title"><a class="title" href="http://sodir.xyz">SoDir</a></li>
+                <li id="login_link_li"><a id="login_link" href="/sodir/login">Login/Signup</a></li>
             </ul>
         </div>
         <div id="socials">
@@ -44,10 +45,7 @@ window.cookieconsent.initialise({
                 After signing up for SoDir, you'll get a shareable link. We suggest putting this link in the 'bio' section of your public social media accounts, so it's easier for people to find your other public social media accounts.
             </p>
         </div>
-        <div id="footer">
-            <p><a href="http://sodir.xyz">About</a></p>
-            <p>Made with &lt;3 by <a href="http://labs.ninesixtwo.xyz">NINESIXTWO</a> in the UK.</p>
-        </div>
+        {% include footer.html %}
     </div>
 </body>
 </html>
