@@ -7,6 +7,8 @@ import os.path
 import uuid
 import threading
 import time
+import boto3
+from botocore.exceptions import ClientError
 
 import dbhandler
 
@@ -87,7 +89,7 @@ class LoginSignupHandler(tornado.web.RequestHandler):
         # Check if account is associated with email supplied.
         user_name = dbhandler.getUserName(supplied_email)
         if user_name == False:
-            # Email is not registered. Sign user up.
+            # TODO: Email is not registered. Sign user up.
             self.redirect("/sodir/checkuremail")
         elif user_name['user_name'] != supplied_user_name:
             # Incorrect username / email combination.
@@ -98,6 +100,8 @@ class LoginSignupHandler(tornado.web.RequestHandler):
             # Generate login key
             login_key = str(uuid.uuid4())
             dbhandler.setLoginKey(user_name['user_name'], login_key)
+            # Send the key containing the login key.
+            loginEmailSender(supplied_email, login_key)
             # Start the login key timeout worker thread.
             t = threading.Thread(target = loginKeyTimeout_worker, args=(user_name['user_name'],))
             logging.info("Starting loginkey timeout worker.")
@@ -111,7 +115,7 @@ class LoginVerificationHandler(tornado.web.RequestHandler):
             self.redirect("/")
         else:
             # Check if login key is valid.
-            user_name = dbhandler.getUserNameFromLoginKey(url)
+            user_name = dbhandler.getUserNameFromLoginKey(url)['user_name']
             if user_name != None:
                 # Generate session id.
                 session_id = str(uuid.uuid4())
@@ -138,6 +142,74 @@ class PrivacyPolicyHandler(tornado.web.RequestHandler):
 class TermsHandler(tornado.web.RequestHandler):
     def get(self):
         self.render("terms.html")
+
+def loginEmailSender(email, loginKey):
+    logging.info("Attempting to send login email.")
+    # Replace sender@example.com with your "From" address.
+    # This address must be verified with Amazon SES.
+    SENDER = "SoDir Login <donotreply@ninesixtwo.xyz>"
+
+    # Replace recipient@example.com with a "To" address. If your account
+    # is still in the sandbox, this address must be verified.
+    RECIPIENT = email
+    # If necessary, replace us-west-2 with the AWS Region you're using for Amazon SES.
+    AWS_REGION = "eu-west-1"
+
+    # The subject line for the email.
+    SUBJECT = "Login to SoDir"
+
+    # The email body for recipients with non-HTML email clients.
+    BODY_TEXT = ("An attempt has been made to login to your SoDir account.\r\n\
+                Please click here or copy the link below into the address bar of your web browser\n\
+                http://sodir.xyz/sodir/v/{0}".format(loginKey))
+
+    # The HTML body of the email.
+    BODY_HTML = """<html>
+    <head></head>
+    <body>
+      <h1>Login to SoDir</h1>
+      <p>An attempt has been made to login to your SoDir account.</p>
+      <p>Please click <a href="http://sodir.xyz/sodir/v/{0}">here</a> or copy the link below into the address bar of your web browser.</p>
+      <p>http://sodir.xyz/sodir/v/{0}</p>
+    </body>
+    </html>
+                """.format(loginKey)
+    # The character encoding for the email.
+    CHARSET = "UTF-8"
+    # Create a new SES resource and specify a region.
+    client = boto3.client('ses',region_name=AWS_REGION)
+    # Try to send the email.
+    try:
+        #Provide the contents of the email.
+        response = client.send_email(
+            Destination={
+                'ToAddresses': [
+                    RECIPIENT,
+                ],
+            },
+            Message={
+                'Body': {
+                    'Html': {
+                        'Charset': CHARSET,
+                        'Data': BODY_HTML,
+                    },
+                    'Text': {
+                        'Charset': CHARSET,
+                        'Data': BODY_TEXT,
+                    },
+                },
+                'Subject': {
+                    'Charset': CHARSET,
+                    'Data': SUBJECT,
+                },
+            },
+            Source=SENDER,
+        )
+    # Display an error if something goes wrong.
+    except ClientError as e:
+        logging.error((e.response['Error']['Message']))
+    else:
+        logging.info(("Email sent! Message ID:{}".format(response['MessageId'])))
 
 def loginKeyTimeout_worker(user_name):
     time.sleep(1200)
