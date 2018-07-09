@@ -17,6 +17,7 @@ def makeConnection():
         except Exception as e:
             return("Error: {0}".format(e))
 
+# getSocials returns all socials for a given user name.
 def getSocials(user_name):
     connection = makeConnection()
     try:
@@ -189,6 +190,37 @@ def getUserNameFromLoginKey(login_key):
             cursor.execute(sql_f)
             result = cursor.fetchone()
             return(result)
+    except Exception as e:
+        return("Error: {0}. Error code is {1}".format(e, e.args[0]))
+    finally:
+        connection.close()
+
+def addNewUser(user_name, user_email):
+    connection = makeConnection()
+    try:
+        with connectgion.cursor() as cursor:
+            sql = ("INSERT INTO users (email, user_name) VALUES ('{0}', '{1}')")
+            sql_f = sql.format(user_email, user_name)
+            cursor.execute(sql_f)
+            connection.commit()
+            return(true)
+    except Exception as e:
+        return("Error: {0}. Error code is {1}".format(e, e.args[0]))
+    finally:
+        connection.close()
+
+def checkUserNameInUse(user_name):
+    connection = makeConnection()
+    try:
+        with connection.cursor() as cursor:
+            sql = ("SELECT * FROM users WHERE user_name = '{0}'")
+            sql_f = sql.format(user_name)
+            cursor.execute(sql_f)
+            result = cursor.fetchall()
+            if len(result) > 0:
+                return(True)
+            else:
+                return(False)
     except Exception as e:
         return("Error: {0}. Error code is {1}".format(e, e.args[0]))
     finally:
