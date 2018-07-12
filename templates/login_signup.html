@@ -37,6 +37,9 @@ window.cookieconsent.initialise({
             <form method="post" action="">
                 <input id="username_input" type="text" name="username" placeholder="Username">
                 <input id="email_input" type="email" name="email" placeholder="Email Address">
+                <div>
+                    {{ message }}
+                </div>
                 <p id="disclaimer">
                     By clicking 'Login' or 'Signup' you are confirming that you have read and agree to the <a href="/sodir/privacy">privacy policy</a> and <a href="/sodir/terms">terms and conditions of use</a>.
                 </p>
@@ -45,9 +48,6 @@ window.cookieconsent.initialise({
                     <input id="singup_button" type="submit" value="Signup">
                 </div>
                 {% module xsrf_form_html() %}
-                <div>
-                    {{ message }}
-                </div>
             </form>
         </div>
         {% include footer.html %}

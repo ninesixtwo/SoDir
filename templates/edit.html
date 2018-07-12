@@ -31,7 +31,10 @@ window.cookieconsent.initialise({
         <div id="navbar">
             <ul>
                 <li class="title"><a class="title" href="http://sodir.xyz">SoDir</a></li>
-                <li id="user_name">{{ user_name }}</li>
+                <div id="right_float">
+                    <li>{{ user_name }}</li>
+                    <li id="logout_button"><img src="{{ static_url("exit.png") }}" height="24" width="24"></li>
+                </div>
             </ul>
         </div>
         <div id="socials">

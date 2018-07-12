@@ -198,12 +198,12 @@ def getUserNameFromLoginKey(login_key):
 def addNewUser(user_name, user_email):
     connection = makeConnection()
     try:
-        with connectgion.cursor() as cursor:
+        with connection.cursor() as cursor:
             sql = ("INSERT INTO users (email, user_name) VALUES ('{0}', '{1}')")
             sql_f = sql.format(user_email, user_name)
             cursor.execute(sql_f)
             connection.commit()
-            return(true)
+            return(True)
     except Exception as e:
         return("Error: {0}. Error code is {1}".format(e, e.args[0]))
     finally:

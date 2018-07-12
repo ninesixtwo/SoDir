@@ -24,9 +24,13 @@ img {
     vertical-align: middle;
 }
 
-#user_name {
+#right_float {
     padding-top: 5px;
     float: right;
+}
+
+#logout_button {
+  padding-left: 10px;
 }
 
 #social_name {
