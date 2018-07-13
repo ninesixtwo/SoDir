@@ -2,7 +2,7 @@
 
 ## server.py
 
-server.py is the main body of code that provides I/O and serves content when a request is made. It relies heavily upon the Tornado library for many of these actions.  
+server.py is the main body of code that serves content when a request is made. It relies heavily upon the Tornado library for many of these actions.  
 
 Because of the way that Tornado works, generally speaking for each piece of functionality that the website has, a handler class defines how SoDir should repspond to a given action. For example, when a request is made to the root URL, the RootHandler defines how SoDir will respond to that request.
 

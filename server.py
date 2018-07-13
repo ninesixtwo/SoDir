@@ -150,6 +150,13 @@ class LoginVerificationHandler(tornado.web.RequestHandler):
             else:
                 self.redirect("/sodir/login")
 
+# Define what should be done when a user clicks the exit button.
+class LogoutHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.clear_cookie("_xsrf")
+        self.clear_cookie("session_id")
+        self.redirect("/")
+
 # Static handlers.
 class RootHandler(tornado.web.RequestHandler):
     def get(self):
@@ -243,8 +250,9 @@ def loginKeyTimeout_worker(user_name):
 
 enable_pretty_logging()
 app = tornado.web.Application(
-    [(r"/", RootHandler), (r"/sodir/login", LoginSignupHandler), (r"/sodir/checkuremail", CheckEmailHandler), (r"/sodir/edit", EditDirectoryHandler),
-    (r"/sodir/privacy", PrivacyPolicyHandler), (r"/sodir/terms", TermsHandler), (r"/sodir/v/(.*)", LoginVerificationHandler), (r"/(.*)", DirectoryHandler),],
+    [(r"/", RootHandler), (r"/sodir/login", LoginSignupHandler), (r"/sodir/exit", LogoutHandler), (r"/sodir/checkuremail", CheckEmailHandler),
+    (r"/sodir/edit", EditDirectoryHandler), (r"/sodir/privacy", PrivacyPolicyHandler), (r"/sodir/terms", TermsHandler),
+    (r"/sodir/v/(.*)", LoginVerificationHandler), (r"/(.*)", DirectoryHandler),],
     # Set the path where tornado will find the html templates
     template_path = os.path.join(os.path.dirname(__file__), "templates"),
     static_path = os.path.join(os.path.dirname(__file__), "static"),
